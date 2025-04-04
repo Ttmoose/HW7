@@ -37,6 +37,25 @@ public class ProblemSolutions {
         int n = values.length;
 
         for (int i = 0; i < n - 1; i++) {
+            int min = i;
+            for (int j = i + 1; j < n; j++) {
+                if (ascending) {
+                    if (values[j] < values[min]) {
+                        min = j;
+                    }
+                } else {
+                    if (values[j] > values[min]) {
+                        min = j;
+                    }
+                }
+            }
+
+            // Swap if needed
+            if (min != i) {
+                int temp = values[min];
+                values[min] = values[i];
+                values[i] = temp;
+            }
 
             // YOU CODE GOES HERE -- COMPLETE THE INNER LOOP OF THIS
             // "SELECTION SORT" ALGORITHM.
