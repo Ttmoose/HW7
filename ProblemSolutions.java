@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /******************************************************************
  *
  *   TUKER MOOSE - COMP 272/400C-002 - Spring 2025
@@ -6,8 +8,6 @@
  *   mergeSortDivisibleByKFirst, asteroidsDestroyed, and numRescueCanoes methods.
  *
  ********************************************************************/
-
-import java.util.Arrays;
 
 public class ProblemSolutions {
 
@@ -109,22 +109,42 @@ public class ProblemSolutions {
      * The merging portion of the merge sort, divisible by k first
      */
 
-    private void mergeDivisbleByKFirst(int arr[], int k, int left, int mid, int right)
-    {
-        // YOUR CODE GOES HERE, THIS METHOD IS NO MORE THAN THE STANDARD MERGE PORTION
-        // OF A MERGESORT, EXCEPT THE NUMBERS DIVISIBLE BY K MUST GO FIRST WITHIN THE
-        // SEQUENCE PER THE DISCUSSION IN THE PROLOGUE ABOVE.
-        //
-        // NOTE: YOU CAN PROGRAM THIS WITH A SPACE COMPLEXITY OF O(1) OR O(N LOG N).
-        // AGAIN, THIS IS REFERRING TO SPACE COMPLEXITY. O(1) IS IN-PLACE, O(N LOG N)
-        // ALLOCATES AUXILIARY DATA STRUCTURES (TEMPORARY ARRAYS). IT WILL BE EASIER
-        // TO CODE WITH A SPACE COMPLEXITY OF O(N LOG N), WHICH IS FINE FOR PURPOSES
-        // OF THIS PROGRAMMING EXERCISES.
+    private void mergeDivisbleByKFirst(int arr[], int k, int left, int mid, int right) {
+        //Initializing temp to new sum value
+        int[] temp = new int[right - left + 1];
+        int x = 0;
 
-        return;
+        //For loop to separate divisible and non-divisible numbers
+        for (int i = left; i <= right; i++) {
+            if (arr[i] % k == 0) {
+                temp[x++] = arr[i];
+            }
+        }
 
+        //Initializing temp to new sum value for non-divisible values
+        int[] nonDivisible = new int[right - left + 1];
+        int nonDivCount = 0;
+
+        //For loop to sort non-divisible numbers
+        for (int i = left; i <= right; i++) {
+            if (arr[i] % k != 0) {
+                nonDivisible[nonDivCount++] = arr[i];
+            }
+        }
+
+        //Array to sort non-divisible numbers fom the index
+        Arrays.sort(nonDivisible, 0, nonDivCount);
+
+        //For loop to add sorted non-divisible numbers
+        for (int i = 0; i < nonDivCount; i++) {
+            temp[x++] = nonDivisible[i];
+        }
+
+        //For loop to copy back to the original array
+        for (int i = 0; i < temp.length; i++) {
+            arr[left + i] = temp[i];
+        }
     }
-
 
     /**
      * Method asteroidsDestroyed
@@ -172,11 +192,16 @@ public class ProblemSolutions {
      */
 
     public static boolean asteroidsDestroyed(int mass, int[] asteroids) {
-
-        // YOUR CODE GOES HERE, CONSIDER USING ARRAYS.SORT()
-
-        return false;
-
+        Arrays.sort(asteroids); 
+        for (int asteroid : asteroids) {
+            if (mass >= asteroid) {
+                // Add asteroid's mass to planet
+                mass += asteroid;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -210,11 +235,19 @@ public class ProblemSolutions {
      */
 
     public static int numRescueSleds(int[] people, int limit) {
+        Arrays.sort(people);
+        int light = 0;
+        int heavy = people.length - 1;
+        int sleds = 0;
 
-        // YOUR CODE GOES HERE, CONSIDER USING ARRAYS.SORT
-
-        return -1;
-
+        while (light <= heavy) {
+            if (people[light] + people[heavy] <= limit) {
+                light++;  // Pair successful
+            }
+            heavy--;  // Heaviest person always goes
+            sleds++;  // One sled used
+        }
+        return sleds;
     }
 
 } // End Class ProblemSolutions
